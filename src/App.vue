@@ -1,6 +1,22 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue';
+import HelloWorld from '@/components/HelloWorld.vue';
+import { customDefineActions, customDebugLogs } from '@/sdk/index';
 
+  function addAction() {
+    const custom_object = {
+        name: 'xxx',
+        mobile: '123'
+    }
+    customDefineActions('custom',custom_object)
+  }
+
+  function addLogs() {
+    const custom_object = {
+        name: 'xxx',
+        mobile: '123'
+    }
+    customDebugLogs('logs',custom_object,'debug')
+  }
 </script>
 
 <template>
@@ -12,6 +28,8 @@ import HelloWorld from './components/HelloWorld.vue';
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
+  <button @click="addAction">clickRum</button>
+  <button @click="addLogs">clickLogs</button>
   <HelloWorld msg="Vite + Vue" />
 </template>
 
