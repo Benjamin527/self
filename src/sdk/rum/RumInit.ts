@@ -1,5 +1,5 @@
 import { datafluxRum } from '@cloudcare/browser-rum';
-import { RUM_CLIENT_TOKEN, RUM_SITE } from './rumConfig';
+import { RUM_CLIENT_TOKEN, RUM_SITE } from '../RumConfig';
 
 //rum init
 export function setupRum(): void {
@@ -19,11 +19,3 @@ export function setupRum(): void {
     });
     datafluxRum.startSessionReplayRecording();
 }
-
-//添加tag
-export function customDefineActions(actionName: string, tags: any): void {
-    datafluxRum && datafluxRum.addAction(actionName, tags);  
-}
-
-
-

@@ -1,10 +1,12 @@
-import { customDefineActions, setupRum } from './sdk_rum/rum';
-import { customDebugLogs, setupLogs } from './sdk_rum/log';
+import { customDefineActions, customDefineTags, customDefineErrors, setupRum } from './rum';
+import { customDebugLogs, setupLogs } from './log';
 
 
 export {
     setupRum,
     setupLogs,
     customDefineActions,
-    customDebugLogs
+    customDebugLogs,
+    customDefineTags,
+    customDefineErrors
 }

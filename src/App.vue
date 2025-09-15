@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import HelloWorld from '@/components/HelloWorld.vue';
-import { customDefineActions, customDebugLogs } from '@/sdk/index';
+import { customDefineActions, customDebugLogs,customDefineTags } from '@/sdk/index';
 
   function addAction() {
     const custom_object = {
@@ -8,6 +8,7 @@ import { customDefineActions, customDebugLogs } from '@/sdk/index';
         mobile: '123'
     }
     customDefineActions('custom',custom_object)
+    customDefineTags('customtags',custom_object)
   }
 
   function addLogs() {
@@ -15,7 +16,7 @@ import { customDefineActions, customDebugLogs } from '@/sdk/index';
         name: 'xxx',
         mobile: '123'
     }
-    customDebugLogs('logs',custom_object,'debug')
+    customDebugLogs('testlogs',custom_object,'debug')
   }
 </script>
 
