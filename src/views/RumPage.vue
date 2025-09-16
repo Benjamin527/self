@@ -26,7 +26,7 @@
             <h3>RUM 功能演示</h3>
             <p>这里展示 RUM (Real User Monitoring) 相关功能</p>
             
-            <el-space direction="vertical" style="width: 100%;">
+            <el-space direction="vertical" style="width: 100%; align-items: normal">
               <el-button
                 v-for="item in buttonFuncList"
                 :key="item.label"
@@ -70,7 +70,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { customDefineActions, customDefineTags, customDefineErrors } from '@/sdk/index'
+import { customDefineActions, customDefineTags, customDefineErrors, customDefineUserInfo } from '@/sdk/index'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
 
@@ -141,11 +141,30 @@ const addCustomError = () => {
   ElMessage.warning('RUM Error 已添加')
 }
 
+const changeCustomUser = () => {
+  //随机id
+  const randomUserid = Math.floor(Math.random() * 10000)
+
+  const userInfo = {
+    id: `user_${randomUserid}`,
+    email: `test_${randomUserid}@example.com`,
+    name: `测试用户_${randomUserid}`,
+  }
+  customDefineUserInfo(userInfo)
+  actionHistory.value.unshift({
+    action: '设置用户信息',
+    timestamp: new Date().toLocaleString(),
+    data: JSON.stringify(userInfo)
+  })
+  ElMessage.info('用户信息已设置')
+}
+
 //按钮列表
 const buttonFuncList = ref([
   { label: '添加自定义 Action', type: 'primary', func: addCustomAction },
   { label: '添加自定义 Tag', type: 'success', func: addCustomTag },
-  { label: '添加自定义 Error', type: 'warning', func: addCustomError }
+  { label: '添加自定义 Error', type: 'warning', func: addCustomError },
+  { label: '切换用户信息', type: 'info', func: changeCustomUser }
 ])
 </script>
 

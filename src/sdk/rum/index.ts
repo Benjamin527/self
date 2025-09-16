@@ -1,4 +1,4 @@
-import { customDefineActions, customDefineTags, customDefineErrors } from './RumFunction';
+import { customDefineActions, customDefineTags, customDefineErrors, customDefineUserInfo } from './RumFunction';
 import {  setupRum } from './RumInit';
 
 export {
@@ -6,4 +6,5 @@ export {
     customDefineTags,
     customDefineErrors,
     setupRum,
+    customDefineUserInfo
 }

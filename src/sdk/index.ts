@@ -1,4 +1,4 @@
-import { customDefineActions, customDefineTags, customDefineErrors, setupRum } from './rum';
+import { customDefineActions, customDefineTags, customDefineErrors, customDefineUserInfo, setupRum } from './rum';
 import { customDebugLogs, setupLogs } from './log';
 
 
@@ -8,5 +8,6 @@ export {
     customDefineActions,
     customDebugLogs,
     customDefineTags,
-    customDefineErrors
+    customDefineErrors,
+    customDefineUserInfo
 }
