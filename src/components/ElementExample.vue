@@ -5,6 +5,8 @@
     <!-- 自动引入的组件，无需手动导入 -->
     <el-button type="primary" @click="showMessage">点击我</el-button>
     <el-button type="success" @click="showNotification">显示通知</el-button>
+    <el-button plain @click="open">显示弹窗</el-button>
+
     
     <el-input 
       v-model="inputValue" 
@@ -12,7 +14,8 @@
       style="margin: 10px 0; width: 300px;"
     />
     
-    <el-table :data="tableData" style="width: 100%; margin-top: 20px;">
+    
+    <el-table  v-loading="loading" :data="tableData" style="width: 100%; margin-top: 20px;">
       <el-table-column prop="name" label="姓名" width="180" />
       <el-table-column prop="age" label="年龄" width="180" />
       <el-table-column prop="address" label="地址" />
@@ -29,11 +32,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ElMessage, ElNotification } from 'element-plus'
+import { onMounted, ref } from 'vue'
+import { ElMessage, ElNotification, ElMessageBox } from 'element-plus'
+import type { Action } from 'element-plus'
 
 const inputValue = ref('')
 const currentPage = ref(1)
+let loading = ref(true)
+
+onMounted(() => {
+  setTimeout(() => {
+    loading.value = false;
+  },3000)
+});
 
 const tableData = ref([
   { name: '张三', age: 25, address: '北京市朝阳区' },
@@ -50,6 +61,21 @@ const showNotification = () => {
     title: '通知标题',
     message: '这是一个通知消息',
     type: 'info'
+  })
+}
+
+//打开弹窗
+const open = () => {
+  ElMessageBox.alert('This is a message', 'Title', {
+    // if you want to disable its autofocus
+    // autofocus: false,
+    confirmButtonText: 'OK',
+    callback: (action: Action) => {
+      ElMessage({
+        type: 'info',
+        message: `action: ${action}`,
+      })
+    },
   })
 }
 </script>

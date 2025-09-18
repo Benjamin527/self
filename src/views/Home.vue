@@ -1,8 +1,9 @@
 <template>
   <div class="home">
-    
     <el-card class="main-card">
-      
+      <div>
+      <DarkMode></DarkMode>
+    </div>
       <el-row :gutter="20">
         <el-col :span="12">
           <el-card shadow="hover" class="feature-card">
@@ -27,6 +28,8 @@
       
       <el-divider />
       
+      <changeUser v-model = "isDark"/>
+      
       
       <!-- Element Plus 示例组件 -->
       <ElementExample />
@@ -35,8 +38,15 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import ElementExample from '@/components/ElementExample.vue'
+import { useRouter } from 'vue-router';
+import ElementExample from '@/components/ElementExample.vue';
+import changeUser from './changeUser.vue';
+
+
+
+import { useDark } from '@vueuse/core'
+  
+const isDark = useDark() // 自动绑定 html.classList
 
 const router = useRouter()
 

@@ -3,8 +3,8 @@ import type { RouteRecordRaw } from 'vue-router'
 
 // 导入页面组件
 import Home from '@/views/Home.vue'
-import RumPage from '@/views/RumPage.vue'
-import LogsPage from '@/views/LogsPage.vue'
+import RumPage from '@/views/rum/RumPage.vue'
+import LogsPage from '@/views/logs/LogsPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {

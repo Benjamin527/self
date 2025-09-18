@@ -9,4 +9,4 @@ export const RUM_SITE= 'https://cn3-rum-openway.guance.com';
 /**
  * customerDataType 方法中第二个参数类型
  */
-export type customerDataType = object | undefined
+export type customerDataType = any | undefined

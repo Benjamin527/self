@@ -40,7 +40,7 @@
         </el-col>
         
         <el-col :span="12">
-          <el-card shadow="hover">
+          <el-card style="margin: 20px" shadow="hover">
             <h3>RUM 配置信息</h3>
             <el-descriptions :column="1" border >
               <el-descriptions-item 
@@ -52,6 +52,7 @@
           </el-card>
         </el-col>
       </el-row>
+      <changeUser />
       
       <el-divider />
       
@@ -73,6 +74,7 @@ import { useRouter } from 'vue-router'
 import { customDefineActions, customDefineTags, customDefineErrors, customDefineUserInfo } from '@/sdk/index'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
+
 
 const router = useRouter()
 
@@ -103,6 +105,10 @@ const addCustomAction = () => {
     timestamp: Date.now()
   }
   customDefineActions('custom_rum_action', customData)
+
+  customDefineActions('custom', {
+    test: true
+  })
 
   actionHistory.value.unshift({
     action: '自定义 Action',

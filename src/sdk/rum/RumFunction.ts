@@ -20,7 +20,7 @@ export function customDefineActions(actionName: string, tags: customerDataType):
  */
 export function customDefineTags(tagKey: string, TagValue: customerDataType): void {
     datafluxRum && datafluxRum.setGlobalContextProperty(tagKey, TagValue);  
-}
+}   
 
 
 /**
