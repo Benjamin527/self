@@ -44,7 +44,8 @@
             <h3>RUM 配置信息</h3>
             <el-descriptions :column="1" border >
               <el-descriptions-item 
-                v-for="item in labelInfo" 
+                v-for="(item, index) in labelInfo" 
+                :key="index"
                 :label="item.label">
                 {{ item.value }}
               </el-descriptions-item>

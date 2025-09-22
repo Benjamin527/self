@@ -9,7 +9,7 @@ import type { User } from '@cloudcare/browser-core';
  * @param tags value 可以是string也可以是obj
  */
 export function customDefineActions(actionName: string, tags: customerDataType): void {
-    datafluxRum && datafluxRum.addAction(actionName, tags);  
+    datafluxRum.addAction(actionName, tags);  
 }
 
 
@@ -19,7 +19,7 @@ export function customDefineActions(actionName: string, tags: customerDataType):
  * @param TagValue value 可以是string也可以是obj
  */
 export function customDefineTags(tagKey: string, TagValue: customerDataType): void {
-    datafluxRum && datafluxRum.setGlobalContextProperty(tagKey, TagValue);  
+    datafluxRum.setGlobalContextProperty(tagKey, TagValue);  
 }   
 
 
@@ -29,7 +29,7 @@ export function customDefineTags(tagKey: string, TagValue: customerDataType): vo
  * @param tags value 可以是string也可以是obj
  */
 export function customDefineErrors(actionName: string, tags: customerDataType): void {
-    datafluxRum && datafluxRum.addError(actionName, tags);  
+    datafluxRum.addError(actionName, tags);  
 }
 
 /**
@@ -37,5 +37,5 @@ export function customDefineErrors(actionName: string, tags: customerDataType): 
  * @param user 用户信息对象
  */
 export function customDefineUserInfo(user: User): void {
-    datafluxRum && datafluxRum.setUser(user);  
+   datafluxRum.setUser(user);  
 }
