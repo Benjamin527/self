@@ -1,5 +1,7 @@
 import { datafluxRum } from '@cloudcare/browser-rum';
 import { RUM_CLIENT_TOKEN, RUM_SITE } from '../RumConfig';
+import posthog from 'posthog-js';
+
 
 //rum init
 export function setupRum(): void {
@@ -19,3 +21,11 @@ export function setupRum(): void {
     });
     datafluxRum.startSessionReplayRecording();
 }
+
+export function initPosthog(): void {
+    posthog.init('phc_QyR904n1u8ZZx7kzyAmtKoXIuDAQlehaAdrANyHmKIP', {
+        api_host: 'https://us.i.posthog.com',
+        defaults: '2025-05-24'
+      })
+}
+  

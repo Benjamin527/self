@@ -13,6 +13,7 @@
     "@cloudcare/browser-rum": "^3.2.35",
     "@element-plus/icons-vue": "^2.3.2",
     "element-plus": "^2.11.2",
+    "posthog-js": "^1.266.3",
     "unplugin-auto-import": "^20.1.0",
     "unplugin-vue-components": "^29.0.0",
     "vite-plugin-vue-devtools": "^8.0.2",
