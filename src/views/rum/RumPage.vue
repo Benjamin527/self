@@ -1,86 +1,83 @@
 <template>
-  <div class="rum-page">
-    <!-- 顶部导航栏 -->
-    <div class="page-header">
-      <el-button 
-        type="primary" 
-        :icon="ArrowLeft" 
-        @click="goBack"
-        class="back-button"
-      >
-        返回主页
-      </el-button>
-      <h1 class="page-title">RUM 监控页面</h1>
-    </div>
-    
-    <el-card class="box-card">
-      <template #header>
-        <div class="card-header">
-          <span>RUM 功能演示</span>
-        </div>
+  <div class="rum-page page-container">
+    <PageHeader
+      title="RUM 监控页面"
+      description="实时用户监控和性能分析"
+      :icon="Monitor"
+    >
+      <template #actions>
+        <el-button :icon="Refresh" @click="refreshPage">刷新</el-button>
       </template>
-      
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-card shadow="hover">
+    </PageHeader>
+
+    <div class="page-content">
+      <div class="grid grid-2">
+        <el-card shadow="hover" class="hover-lift">
+          <template #header>
             <h3>RUM 功能演示</h3>
-            <p>这里展示 RUM (Real User Monitoring) 相关功能</p>
-            
-            <el-space direction="vertical" style="width: 100%; align-items: normal">
-              <el-button
-                v-for="item in buttonFuncList"
-                :key="item.label"
-                :type="item.type"
-                @click="item.func()"
-              >
-                {{ item.label }}
-              </el-button>
-            </el-space>
-          </el-card>
-        </el-col>
+          </template>
+          
+          <p style="margin-bottom: var(--spacing-lg); color: var(--text-secondary)">
+            这里展示 RUM (Real User Monitoring) 相关功能
+          </p>
+          
+          <el-space direction="vertical" style="width: 100%; align-items: normal">
+            <el-button
+              v-for="item in buttonFuncList"
+              :key="item.label"
+              :type="item.type"
+              @click="item.func()"
+              size="large"
+            >
+              {{ item.label }}
+            </el-button>
+          </el-space>
+        </el-card>
         
-        <el-col :span="12">
-          <el-card style="margin: 20px" shadow="hover">
+        <el-card shadow="hover" class="hover-lift">
+          <template #header>
             <h3>RUM 配置信息</h3>
-            <el-descriptions :column="1" border >
-              <el-descriptions-item 
-                v-for="(item, index) in labelInfo" 
-                :key="index"
-                :label="item.label">
-                {{ item.value }}
-              </el-descriptions-item>
-            </el-descriptions>
-          </el-card>
-        </el-col>
-      </el-row>
-      <changeUser />
+          </template>
+          
+          <el-descriptions :column="1" border>
+            <el-descriptions-item 
+              v-for="(item, index) in labelInfo" 
+              :key="index"
+              :label="item.label">
+              {{ item.value }}
+            </el-descriptions-item>
+          </el-descriptions>
+        </el-card>
+      </div>
       
-      <el-divider />
+      <UserSwitcher />
       
-      <div class="action-history">
-        <h3>操作历史</h3>
+      <el-card class="hover-lift" style="margin-top: var(--spacing-lg)">
+        <template #header>
+          <h3>操作历史</h3>
+        </template>
         <el-table :data="actionHistory" style="width: 100%">
           <el-table-column prop="action" label="操作" width="200" />
           <el-table-column prop="timestamp" label="时间" width="200" />
           <el-table-column prop="data" label="数据" />
         </el-table>
-      </div>
-    </el-card>
+      </el-card>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import PageHeader from '@/components/common/PageHeader.vue'
 import { customDefineActions, customDefineTags, customDefineErrors, customDefineUserInfo } from '@/sdk/index'
 import { ElMessage } from 'element-plus'
-import { ArrowLeft } from '@element-plus/icons-vue'
+import { Monitor, Refresh } from '@element-plus/icons-vue'
+import UserSwitcher from '@/components/common/UserSwitcher.vue'
 
 
-const router = useRouter()
 
-const goBack = () => {
-  router.push('/')
+const refreshPage = () => {
+  ElMessage.success('页面已刷新')
 }
 
 //操作历史
@@ -177,54 +174,17 @@ const buttonFuncList = ref([
 
 <style scoped>
 .rum-page {
-  min-height: 100vh;
-  background-color: #f5f5f5;
-  padding: 0;
+  animation: fadeIn 0.5s ease-out;
 }
 
-.page-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 20px 30px;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.back-button {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-}
-
-.back-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
-.page-title {
+:deep(.el-card__header h3) {
   margin: 0;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 600;
+  color: var(--text-primary);
 }
 
-.box-card {
-  margin: 20px 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 18px;
-  font-weight: 600;
-  color: #303133;
-}
-
-.action-history {
-  margin-top: 20px;
+:deep(.el-card) {
+  margin-bottom: var(--spacing-lg);
 }
 </style>

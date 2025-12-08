@@ -1,4 +1,6 @@
 import { createApp } from 'vue'
+import './styles/theme.css'
+import './styles/animations.css'
 import './style.css'
 import App from './App.vue'
 import { setupLogs, setupRum, initPosthog } from './sdk'
