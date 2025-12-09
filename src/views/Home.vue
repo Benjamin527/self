@@ -61,7 +61,8 @@ import {
   Connection,
   Sunny,
   Moon,
-  ArrowRight
+  ArrowRight,
+  EditPen
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -133,6 +134,17 @@ const features = ref([
     stats: [
       { label: '请求数', value: '1.2K' },
       { label: '成功率', value: '94%' }
+    ]
+  },
+  {
+    path: '/calligraphy',
+    title: '书法临摹',
+    description: '在线书法临摹练习，支持田字格和多种笔触',
+    icon: EditPen,
+    color: 'purple',
+    stats: [
+      { label: '字帖', value: '1' },
+      { label: '画笔', value: '3' }
     ]
   }
 ])

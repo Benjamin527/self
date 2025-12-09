@@ -9,6 +9,7 @@ import LogsPage from '@/views/logs/LogsPage.vue'
 import PerformancePage from '@/views/performance/PerformancePage.vue'
 import ErrorTrackingPage from '@/views/errors/ErrorTrackingPage.vue'
 import NetworkPage from '@/views/network/NetworkPage.vue'
+import CalligraphyPage from '@/views/calligraphy/CalligraphyPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -45,6 +46,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/network',
     name: 'Network',
     component: NetworkPage
+  },
+  {
+    path: '/calligraphy',
+    name: 'Calligraphy',
+    component: CalligraphyPage
   }
 ]
 
