@@ -9,14 +9,15 @@ export function setupRum(): void {
         applicationId: 'self',
         site: RUM_SITE,
         clientToken: RUM_CLIENT_TOKEN,
-        env: 'dev',
-        version: '1.0',
+        env: 'production',
+        version: '1.0.0',
         service: 'self',
         sessionSampleRate: 100,
         sessionReplaySampleRate: 100,
         compressIntakeRequests: true,
         trackInteractions: true,
         traceType: 'ddtrace',
+        remoteConfiguration: true,
         allowedTracingOrigins: ['https://api.example.com', /https:\/\/.*\.my-api-domain\.com/],
     });
     datafluxRum.startSessionReplayRecording();

@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTheme } from '@/composables/useTheme'
 import UserSwitcher from '@/components/common/UserSwitcher.vue'
@@ -64,8 +64,17 @@ import {
   ArrowRight
 } from '@element-plus/icons-vue'
 
+import { blockMainThread } from '@/util/element'
 const router = useRouter()
 const { isDark, toggleTheme } = useTheme()
+
+//test
+onMounted(() => {
+    blockMainThread(120);
+    console.log(aaa)
+})
+
+
 
 // 功能列表
 const features = ref([

@@ -29,3 +29,11 @@ export {
   ElMessageBox,
   ElNotification
 } from 'element-plus'
+
+export function blockMainThread(ms = 120) {
+  const start = performance.now();
+  while (performance.now() - start < ms) {
+    // 空循环，纯同步阻塞
+    Math.sqrt(Math.random());
+  }
+}
