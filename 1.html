@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiMo AI - 极简对话</title>
+    <style>
+        :root {
+            --bg-color: #0e0e0e;
+            --input-bg: #1e1e1e;
+            --text-main: #e3e3e3;
+            --text-dim: #999;
+            --accent-gradient: linear-gradient(45deg, #4285f4, #9b72cb, #d96570);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 顶部欢迎语 */
+        .welcome-container {
+            margin-top: 15vh;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .welcome-text {
+            font-size: 32px;
+            font-weight: 500;
+            margin-bottom: 40px;
+        }
+
+        .welcome-text span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 对话展示区 */
+        #chat-history {
+            width: 100%;
+            max-width: 800px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            display: none; /* 初始隐藏，有对话时显示 */
+        }
+
+        .message {
+            margin-bottom: 30px;
+            line-height: 1.6;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .user-msg { color: var(--text-main); font-weight: bold; }
+        .ai-msg { color: #d1d1d1; white-space: pre-wrap; }
+
+        /* 输入区域容器 */
+        .input-wrapper {
+            width: 90%;
+            max-width: 800px;
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .input-container {
+            background: var(--input-bg);
+            border-radius: 28px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            padding: 10px;
+            outline: none;
+        }
+
+        .send-btn {
+            background: none;
+            border: none;
+            color: #4285f4;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 5px 10px;
+        }
+
+        /* 快捷按钮 */
+        .shortcuts {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .chip {
+            background: #252525;
+            border: 1px solid #333;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .chip:hover { background: #333; color: white; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 隐藏滚动条 */
+        #chat-history::-webkit-scrollbar { width: 0; }
+    </style>
+</head>
+<body>
+
+    <div class="welcome-container" id="welcome">
+        <div class="welcome-text">
+            <span>Benji，你好</span><br>
+            需要我为你做些什么？
+        </div>
+        <div class="shortcuts">
+            <div class="chip" onclick="quickSend('制作图片')">✨ 制作图片</div>
+            <div class="chip" onclick="quickSend('随便写点什么')">随便写点什么</div>
+            <div class="chip" onclick="quickSend('帮我学习')">帮我学习</div>
+            <div class="chip" onclick="quickSend('给我的一天注入活力')">给我的一天注入活力</div>
+        </div>
+    </div>
+
+    <div id="chat-history"></div>
+
+    <div class="input-wrapper">
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="问问 MiMo..." autocomplete="off">
+            <button class="send-btn" id="send-btn">发送</button>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'sk-c7s2p524rg9x4o9iyy7okioba16yhtbx4lsjy1j5j3unn2qo';
+        const API_URL = 'https://tight-mud-80ba.summerhall11032.workers.dev/v1/chat/completions';
+        
+        const welcome = document.getElementById('welcome');
+        const chatHistory = document.getElementById('chat-history');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+async function sendMessage(content) {
+    if (!content || !content.trim()) return;
+
+    // 1. UI 切换
+    welcome.style.display = 'none';
+    chatHistory.style.display = 'block';
+
+    // 2. 显示用户消息
+    appendMessage('user', content);
+    userInput.value = '';
+
+    // 3. 创建 AI 回答的占位框
+    const aiMsgId = 'ai-' + Date.now();
+    appendMessage('ai', '正在思考...', aiMsgId);
+    const aiContainer = document.getElementById(aiMsgId);
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'api-key': API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "model": "mimo-v2-flash",
+                "messages": [
+                    { "role": "system", "content": "You are MiMo, an AI assistant developed by Xiaomi." },
+                    { "role": "user", "content": content }
+                ],
+                "temperature": 0.3,
+                "stream": false
+            })
+        });
+
+        const data = await response.json();
+        
+        // 关键点：根据你提供的 JSON 结构提取 content
+        const resultText = data.choices[0].message.content;
+
+        // 4. 清除“思考中”，开始打字机渲染
+        aiContainer.innerText = '';
+        typeWriter(aiContainer, resultText);
+
+    } catch (error) {
+        console.error("请求失败:", error);
+        aiContainer.innerText = "抱歉，由于网络或跨域问题，我暂时无法回答。";
+    }
+}
+
+// 辅助函数：打字机效果
+function typeWriter(element, text, index = 0) {
+    if (index < text.length) {
+        element.innerText += text.charAt(index);
+        index++;
+        
+        // 自动滚动到底部
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+        
+        setTimeout(() => {
+            typeWriter(element, text, index);
+        }, 20); // 调整数字可以改变打字速度
+    }
+}
+
+// 辅助函数：添加消息到容器
+function appendMessage(role, text, id = '') {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${role}-msg`;
+    
+    // 这里的样式美化
+    if (role === 'user') {
+        messageDiv.style.color = '#fff';
+        messageDiv.style.fontWeight = '500';
+        messageDiv.innerHTML = `<span style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">你</span> ${text}`;
+    } else {
+        messageDiv.style.color = '#d1d1d1';
+        messageDiv.innerHTML = `<span style="color: #4285f4; font-size: 12px; display: block; margin-bottom: 4px;">MiMo</span> <span id="${id}">${text}</span>`;
+    }
+
+    chatHistory.appendChild(messageDiv);
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+
+// 快捷发送
+function quickSend(text) {
+    userInput.value = text;
+    sendMessage(text);
+}
+
+// 监听事件
+sendBtn.addEventListener('click', () => sendMessage(userInput.value));
+userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage(userInput.value);
+});
+        function appendMessage(role, text, id = '') {
+            const div = document.createElement('div');
+            div.className = `message ${role}-msg`;
+            if(id) div.id = id;
+            div.innerText = (role === 'user' ? 'You: ' : '') + text;
+            chatHistory.appendChild(div);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function quickSend(text) {
+            userInput.value = text;
+            sendMessage(text);
+        }
+
+        sendBtn.addEventListener('click', () => sendMessage(userInput.value));
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage(userInput.value);
+        });
+    </script>
+</body>
+</html>
