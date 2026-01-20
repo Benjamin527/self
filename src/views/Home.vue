@@ -64,15 +64,15 @@ import {
   ArrowRight
 } from '@element-plus/icons-vue'
 
-import { blockMainThread } from '@/util/element'
+// import { blockMainThread } from '@/util/element'
 const router = useRouter()
 const { isDark, toggleTheme } = useTheme()
 
-//test
-onMounted(() => {
-    blockMainThread(120);
-    console.log(aaa)
-})
+// //test
+// onMounted(() => {
+//     blockMainThread(120);
+//     console.log(aaa)
+// })
 
 
 
